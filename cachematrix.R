@@ -4,29 +4,29 @@
 #'and should exit with a message
 
 makeCacheMatrix <- function(x = matrix()) {
-  determinant <- NULL
+  #inverse matrix variable
   inverseMatrix <- NULL
   
-  #check if determinant is not zero
+  #check if determinant is not zero (or very close)
   det <- abs(det(x))
   
+  #if zero (or almost), inverse does not exists, so exit function
   if (det < 0.000001){
     message("Matrix does not have a Inverse")
     return(x)
   }
   
-  set <- function(y){
-    x <<- y
-    inverseMatrix <<- NULL
-  }
-  
+  #return the 'm' matrix
   get <- function() x
   
+  #set the 'inv' value to the 'inverseMatrix' variable
   setinv <- function(inv) inverseMatrix <<- inv
+  
+  #get the 'inverseMatrix' value
   getinv <- function() inverseMatrix
   
-  list(set = set, 
-       get = get, 
+  #list needed functions
+  list(get = get, 
        setinv = setinv,
        getinv = getinv)
 }
@@ -38,12 +38,17 @@ makeCacheMatrix <- function(x = matrix()) {
 #'If cache is not available
 
 cacheSolve <- function(x, ...) {
+  #trying to get the inversed matrix from cache
   inverseMatrix <- x$getinv()
   
+  #if inversed matrix comes from cache, send a message and
+  # exits function returning cache value
   if (!is.null(inverseMatrix)){
     message("Getting Cached Data")
     return(inverseMatrix)
   }
+  
+  #if not in cache, continues...  
   
   #getting matrix
   data <- x$get()
